@@ -1,8 +1,33 @@
 grumphp:
+    ascii: null
+    stop_on_failure: true
+
+    fixer:
+        enabled: false
+
     tasks:
-        composer: null
-        composer_normalize: null
-        yamllint: null
+        composer:
+            metadata:
+                priority: 2
+
+        composer_normalize:
+            metadata:
+                priority: 2
+
+        yamllint:
+            metadata:
+                priority: 2
 
         phpcsfixer:
             config: '.php-cs-fixer.dist.php'
+
+            metadata:
+                priority: 1
+
+        phpstan:
+            configuration: 'phpstan.dist.neon'
+            memory_limit: '256M'
+            use_grumphp_paths: true
+
+            metadata:
+                priority: 0

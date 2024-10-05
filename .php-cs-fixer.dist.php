@@ -23,6 +23,7 @@ return (new PhpCsFixer\Config())
 		'date_time_create_from_format_call' => true,
 		'declare_strict_types' => true,
 		'void_return' => true,
+		'static_lambda' => true,
 
 		'blank_line_before_statement' => [
 			'statements' => [

@@ -7,6 +7,6 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.{yaml,yml,json,lock}]
+[*.{yaml,yml,json,lock,neon}]
 indent_style = space
 indent_size = 4
