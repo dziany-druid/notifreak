@@ -1,2 +1,8 @@
 grumphp:
-  tasks: { composer_normalize: null }
+    tasks:
+        composer: null
+        composer_normalize: null
+        yamllint: null
+
+        phpcsfixer:
+            config: '.php-cs-fixer.dist.php'

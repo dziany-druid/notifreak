@@ -1,4 +1,6 @@
 {
+    "name": "dziany-druid/notifreak",
+    "description": "A simple application used to receive messages from various services and forward them to various notification channels.",
     "license": "MIT",
     "type": "project",
     "require": {
@@ -14,6 +16,7 @@
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.44",
+        "friendsofphp/php-cs-fixer": "^3.64",
         "phpro/grumphp-shim": "^2.8",
         "symfony/stopwatch": "~7.1.0",
         "symfony/web-profiler-bundle": "~7.1.0"
@@ -75,6 +78,9 @@
         },
         "grumphp": [
             "php ./vendor/bin/grumphp run"
+        ],
+        "php-cs-fixer": [
+            "php ./vendor/bin/php-cs-fixer fix -v"
         ]
     }
 }
