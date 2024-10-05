@@ -1,47 +1,23 @@
 {
-    "type": "project",
     "license": "MIT",
-    "minimum-stability": "stable",
-
+    "type": "project",
     "require": {
         "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "symfony/console": "7.1.*",
-        "symfony/dotenv": "7.1.*",
+        "symfony/console": "~7.1.0",
+        "symfony/dotenv": "~7.1.0",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "7.1.*",
-        "symfony/runtime": "7.1.*",
-        "symfony/yaml": "7.1.*"
+        "symfony/framework-bundle": "~7.1.0",
+        "symfony/runtime": "~7.1.0",
+        "symfony/yaml": "~7.1.0"
     },
-
     "require-dev": {
-        "symfony/stopwatch": "7.1.*",
-        "symfony/web-profiler-bundle": "7.1.*"
+        "ergebnis/composer-normalize": "^2.44",
+        "phpro/grumphp-shim": "^2.8",
+        "symfony/stopwatch": "~7.1.0",
+        "symfony/web-profiler-bundle": "~7.1.0"
     },
-
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true,
-            "symfony/flex": true,
-            "symfony/runtime": true
-        },
-
-        "sort-packages": true
-    },
-
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
-
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Tests\\": "tests/"
-        }
-    },
-
     "replace": {
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
@@ -52,30 +28,53 @@
         "symfony/polyfill-php81": "*",
         "symfony/polyfill-php82": "*"
     },
-
-    "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
-    },
-
     "conflict": {
         "symfony/symfony": "*"
     },
-
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "php-http/discovery": true,
+            "phpro/grumphp-shim": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "sort-packages": true
+    },
     "extra": {
+        "composer-normalize": {
+            "indent-size": 4,
+            "indent-style": "space"
+        },
         "symfony": {
             "allow-contrib": false,
             "require": "7.1.*"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "grumphp": [
+            "php ./vendor/bin/grumphp run"
+        ]
     }
 }
