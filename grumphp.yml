@@ -8,26 +8,46 @@ grumphp:
     tasks:
         composer:
             metadata:
-                priority: 2
+                priority: 4
 
         composer_normalize:
             metadata:
-                priority: 2
+                priority: 4
 
         yamllint:
             metadata:
-                priority: 2
+                priority: 4
+
+        xmllint:
+            scheme_validation: true
+
+            metadata:
+                priority: 4
 
         phpcsfixer:
-            config: '.php-cs-fixer.dist.php'
+            config: './.php-cs-fixer.dist.php'
+
+            metadata:
+                priority: 3
+
+        phpstan:
+            configuration: './phpstan.dist.neon'
+            memory_limit: '256M'
+            use_grumphp_paths: true
+
+            metadata:
+                priority: 2
+
+        phpunit:
+            config_file: './phpunit.xml.dist'
+            testsuite: 'unit'
 
             metadata:
                 priority: 1
 
-        phpstan:
-            configuration: 'phpstan.dist.neon'
-            memory_limit: '256M'
-            use_grumphp_paths: true
+        clover_coverage:
+            clover_file: './var/tests-result/clover.xml'
+            level: 70
 
             metadata:
                 priority: 0
