@@ -25,6 +25,11 @@ return (new PhpCsFixer\Config())
 		'void_return' => true,
 		'static_lambda' => true,
 
+		'operator_linebreak' => [
+			'only_booleans' => true,
+			'position' => 'end',
+		],
+
 		'blank_line_before_statement' => [
 			'statements' => [
 				'case',
@@ -70,6 +75,18 @@ return (new PhpCsFixer\Config())
 				'method_private',
 				'method_private_static',
 				'destruct',
+			],
+		],
+
+		'trailing_comma_in_multiline' => [
+			'after_heredoc' => true,
+
+			'elements' => [
+				'arguments',
+				'array_destructuring',
+				'arrays',
+				'match',
+				'parameters',
 			],
 		],
 	]);
