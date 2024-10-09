@@ -38,12 +38,12 @@ class NotificationController extends AbstractController
 
 			public function html(): string
 			{
-				return 'html';
+				return '<b>html</b>';
 			}
 
 			public function markdown(): string
 			{
-				return 'markdown';
+				return '*markdown*';
 			}
 		};
 
