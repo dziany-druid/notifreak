@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\EventListener;
+namespace App\Tests\Unit\Security\EventListener;
 
-use App\EventListener\SignatureVerificationListener;
-use App\Security\SignatureInterface;
+use App\Security\EventListener\SignatureVerificationListener;
+use App\Security\Signature\SignatureInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,7 +31,7 @@ class SignatureVerificationListenerTest extends TestCase
 
 	public function testOnKernelRequestWithInvalidRoute(): void
 	{
-		$request = $this->createRequest('signature', 'service', 'non_existent_route');
+		$request = $this->createRequest('signature', 'service', 'some_other_route');
 		$event = $this->createEvent($request);
 		$this->listener->onKernelRequest($event);
 		$this->assertNull($event->getResponse());
@@ -92,7 +92,7 @@ class SignatureVerificationListenerTest extends TestCase
 	{
 		$request = new Request();
 		$request->attributes->set('_route', $route);
-		$request->query->set('notifiers', ['notifier_1', 'notifier_2']);
+		$request->query->set('query_param', ['one', 'two']);
 
 		if (null !== $signature) {
 			$request->attributes->set('signature', $signature);

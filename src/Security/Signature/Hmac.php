@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Security;
+namespace App\Security\Signature;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class HmacSignature implements SignatureInterface
+final class Hmac implements SignatureInterface
 {
 	private readonly string $securityKey;
 
