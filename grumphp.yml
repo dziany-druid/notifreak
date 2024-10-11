@@ -8,27 +8,27 @@ grumphp:
     tasks:
         composer:
             metadata:
-                priority: 4
+                priority: 1
 
         composer_normalize:
             metadata:
-                priority: 4
+                priority: 1
 
         yamllint:
             metadata:
-                priority: 4
+                priority: 1
 
         xmllint:
             scheme_validation: true
 
             metadata:
-                priority: 4
+                priority: 1
 
         phpcsfixer:
             config: './.php-cs-fixer.dist.php'
 
             metadata:
-                priority: 3
+                priority: 1
 
         phpstan:
             configuration: './phpstan.dist.neon'
@@ -36,7 +36,7 @@ grumphp:
             use_grumphp_paths: true
 
             metadata:
-                priority: 2
+                priority: 1
 
         phpunit:
             config_file: './phpunit.xml.dist'

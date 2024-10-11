@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\EventListener;
+namespace App\Security\EventListener;
 
-use App\Security\SignatureInterface;
+use App\Security\Signature\SignatureInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 	event: 'kernel.request',
 	method: 'onKernelRequest',
 )]
-class SignatureVerificationListener
+final class SignatureVerificationListener
 {
 	public function __construct(
 		private readonly SignatureInterface $signature,
@@ -46,9 +46,9 @@ class SignatureVerificationListener
 			return;
 		}
 
-		$notifiers = $request->query->all('notifiers');
+		$queryParams = $request->query->all();
 
-		if (!$this->signature->verify($signature, $service.serialize($notifiers))) {
+		if (!$this->signature->verify($signature, $service.serialize($queryParams))) {
 			$this->forbiddenResponse($event);
 		}
 	}
