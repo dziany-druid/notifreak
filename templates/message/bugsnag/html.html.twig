@@ -1,0 +1,13 @@
+🐞<u><b>Bugsnag</b></u>
+
+New error from <b>{{ error.project }}</b>:
+
+<pre>
+{{ error.exceptionClass }}
+	{{ error.message }}
+</pre>
+
+<b>First occurrence time:</b> {{ error.firstReceived|date('Y-m-d H:i e') }}
+<b>Occurrence time:</b> {{ error.receivedAt|date('Y-m-d H:i e') }}
+
+<a href="{{ error.url }}">Show error details</a>

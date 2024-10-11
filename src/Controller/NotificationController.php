@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Message\ContentInterface;
+use App\Message\Formatter\ParserFactory;
 use App\Message\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,34 +18,52 @@ class NotificationController extends AbstractController
 	public function __construct(
 		private readonly ValidatorInterface $validator,
 		private readonly MessageBusInterface $messageBus,
+		private readonly ParserFactory $parserFactory,
 	) {
 	}
 
 	#[Route(
-		path: '/notification/{signature}/{service}',
+		path: '/notification/{signature}/{parserName}',
 		name: 'queue_notification',
-		requirements: ['signature' => '[a-z0-9]+', 'service' => '[a-z]+'],
+		requirements: ['signature' => '[a-z0-9]+', 'parser' => '[a-z]+'],
 		methods: [Request::METHOD_POST],
 		stateless: true,
 	)]
-	public function queue(string $service, Request $request): Response
+	public function queue(string $parserName, Request $request): Response
 	{
-		$content = new class implements ContentInterface {
-			public function plain(): string
-			{
-				return 'plain';
-			}
+		$requestBody = $request->getContent();
 
-			public function html(): string
-			{
-				return '<b>html</b>';
-			}
+		if (empty($requestBody)) {
+			return $this->json(
+				[
+					'violations' => [
+						[
+							'message' => 'Request body must not be empty.',
+						],
+					],
+				],
 
-			public function markdown(): string
-			{
-				return '*markdown*';
-			}
-		};
+				Response::HTTP_BAD_REQUEST,
+			);
+		}
+
+		$parser = $this->parserFactory->create($parserName);
+
+		try {
+			$content = $parser->parse($requestBody);
+		} catch (\JsonException) {
+			return $this->json(
+				[
+					'violations' => [
+						[
+							'message' => 'Request body is not a valid JSON.',
+						],
+					],
+				],
+
+				Response::HTTP_BAD_REQUEST,
+			);
+		}
 
 		$notification = new Notification(
 			$content,

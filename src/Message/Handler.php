@@ -15,7 +15,7 @@ final class Handler
 	 * @param iterable<ChannelInterface> $supportedChannels
 	 */
 	public function __construct(
-		#[AutowireIterator('app.notification_channel')]
+		#[AutowireIterator('app.message.channel')]
 		private readonly iterable $supportedChannels,
 	) {
 	}

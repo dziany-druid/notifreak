@@ -31,7 +31,7 @@ class SignatureVerificationListenerTest extends TestCase
 
 	public function testOnKernelRequestWithInvalidRoute(): void
 	{
-		$request = $this->createRequest('signature', 'service', 'some_other_route');
+		$request = $this->createRequest('signature', 'parser_name', 'some_other_route');
 		$event = $this->createEvent($request);
 		$this->listener->onKernelRequest($event);
 		$this->assertNull($event->getResponse());
@@ -39,13 +39,13 @@ class SignatureVerificationListenerTest extends TestCase
 
 	public function testOnKernelRequestWithMissingSignature(): void
 	{
-		$request = $this->createRequest(null, 'service');
+		$request = $this->createRequest(null, 'parser_name');
 		$event = $this->createEvent($request);
 		$this->listener->onKernelRequest($event);
 		$this->assertForbiddenResponse($event->getResponse());
 	}
 
-	public function testOnKernelRequestWithMissingService(): void
+	public function testOnKernelRequestWithMissingParser(): void
 	{
 		$request = $this->createRequest('signature', null);
 		$event = $this->createEvent($request);
@@ -55,7 +55,7 @@ class SignatureVerificationListenerTest extends TestCase
 
 	public function testOnKernelRequestWithInvalidSignature(): void
 	{
-		$request = $this->createRequest('signature', 'service');
+		$request = $this->createRequest('signature', 'parser_name');
 		$event = $this->createEvent($request);
 		$this->signatureMock->method('verify')->willReturn(false);
 		$this->listener->onKernelRequest($event);
@@ -64,7 +64,7 @@ class SignatureVerificationListenerTest extends TestCase
 
 	public function testOnKernelRequestWithUnsafeSignature(): void
 	{
-		$request = $this->createRequest('unsafe', 'service');
+		$request = $this->createRequest('unsafe', 'parser_name');
 		$event = $this->createEvent($request);
 		$this->listener->onKernelRequest($event);
 		$this->assertForbiddenResponse($event->getResponse());
@@ -72,7 +72,7 @@ class SignatureVerificationListenerTest extends TestCase
 
 	public function testOnKernelRequestWithValidSignature(): void
 	{
-		$request = $this->createRequest('signature', 'service');
+		$request = $this->createRequest('signature', 'parser_name');
 		$event = $this->createEvent($request);
 		$this->signatureMock->method('verify')->willReturn(true);
 		$this->listener->onKernelRequest($event);
@@ -82,13 +82,13 @@ class SignatureVerificationListenerTest extends TestCase
 	public function testOnKernelRequestWithUnsafeSignatureInDebugMode(): void
 	{
 		$listener = new SignatureVerificationListener($this->signatureMock, true);
-		$request = $this->createRequest('unsafe', 'service');
+		$request = $this->createRequest('unsafe', 'parser_name');
 		$event = $this->createEvent($request);
 		$listener->onKernelRequest($event);
 		$this->assertNull($event->getResponse());
 	}
 
-	private function createRequest(mixed $signature, mixed $service, string $route = 'queue_notification'): Request
+	private function createRequest(mixed $signature, mixed $parserName, string $route = 'queue_notification'): Request
 	{
 		$request = new Request();
 		$request->attributes->set('_route', $route);
@@ -98,8 +98,8 @@ class SignatureVerificationListenerTest extends TestCase
 			$request->attributes->set('signature', $signature);
 		}
 
-		if (null !== $service) {
-			$request->attributes->set('service', $service);
+		if (null !== $parserName) {
+			$request->attributes->set('parserName', $parserName);
 		}
 
 		return $request;

@@ -34,9 +34,9 @@ final class SignatureVerificationListener
 		}
 
 		$signature = $request->attributes->get('signature');
-		$service = $request->attributes->get('service');
+		$parserName = $request->attributes->get('parserName');
 
-		if (!\is_string($signature) || !\is_string($service)) {
+		if (!\is_string($signature) || !\is_string($parserName)) {
 			$this->forbiddenResponse($event);
 
 			return;
@@ -48,7 +48,7 @@ final class SignatureVerificationListener
 
 		$queryParams = $request->query->all();
 
-		if (!$this->signature->verify($signature, $service.serialize($queryParams))) {
+		if (!$this->signature->verify($signature, $parserName.serialize($queryParams))) {
 			$this->forbiddenResponse($event);
 		}
 	}

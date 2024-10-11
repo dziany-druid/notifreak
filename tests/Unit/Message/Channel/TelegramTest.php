@@ -57,4 +57,26 @@ class TelegramTest extends TestCase
 
 		$this->telegram->send($notification);
 	}
+
+	public function testSendTrimsLongMessageAndSendsIt(): void
+	{
+		$contentMock = $this->createMock(ContentInterface::class);
+		$contentMock->method('markdown')->willReturn(str_repeat('A', 4100));
+		$notification = new Notification($contentMock, ['telegram']);
+
+		$this->chatterMock
+			->expects($this->once())
+			->method('send')
+			->with(
+				$this->callback(
+					function (ChatMessage $chatMessage) {
+						$this->assertSame(str_repeat('A', 4096), $chatMessage->getSubject());
+
+						return true;
+					},
+				),
+			);
+
+		$this->telegram->send($notification);
+	}
 }

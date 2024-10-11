@@ -19,6 +19,6 @@ class Kernel extends BaseKernel
 
 		$container
 			->registerForAutoconfiguration(ChannelInterface::class)
-			->addTag('app.notification_channel');
+			->addTag('app.message.channel');
 	}
 }
