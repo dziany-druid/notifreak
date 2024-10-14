@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Message;
 
-use App\Message\ContentInterface;
 use App\Message\Notification;
+use App\Parser\ContentInterface;
 use PHPUnit\Framework\TestCase;
 
 class NotificationTest extends TestCase

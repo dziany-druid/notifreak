@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Message\Formatter\Bugsnag;
+namespace App\Parser\Service\Bugsnag;
 
 final readonly class Error
 {

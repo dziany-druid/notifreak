@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Message\Formatter\Bugsnag;
+namespace App\Parser\Service\Bugsnag;
 
-use App\Message\ContentInterface;
+use App\Parser\ContentInterface;
 use Twig\Environment;
 
 final class Content implements ContentInterface

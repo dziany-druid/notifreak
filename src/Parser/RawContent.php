@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Message\Formatter\Raw;
+namespace App\Parser;
 
-use App\Message\ContentInterface;
-
-final class Content implements ContentInterface
+final class RawContent implements ContentInterface
 {
 	public function __construct(
 		private readonly string $requestBody,

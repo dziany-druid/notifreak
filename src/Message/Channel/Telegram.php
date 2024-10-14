@@ -27,23 +27,32 @@ final class Telegram implements ChannelInterface
 
 	public function send(Notification $notification): void
 	{
+		// Telegram message must not be empty.
+		if ('' === $notification->content->plain()) {
+			return;
+		}
+
 		$options = (new TelegramOptions())
 			->disableWebPagePreview(true);
 
 		$content = $notification->content->markdown();
+		$chunks = [];
 
-		if (mb_strlen($content, self::ENCODING) >= self::MAX_MESSAGE_SIZE) {
-			$content = mb_substr($content, 0, self::MAX_MESSAGE_SIZE, self::ENCODING);
+		if (mb_strlen($content, self::ENCODING) > self::MAX_MESSAGE_SIZE) {
+			$chunks = mb_str_split($content, self::MAX_MESSAGE_SIZE);
 		} else {
+			$chunks[] = $content;
 			$options->parseMode(TelegramOptions::PARSE_MODE_MARKDOWN);
 		}
 
-		$chatMessage = new ChatMessage(
-			$content,
-			$options,
-		);
+		foreach ($chunks as $chunk) {
+			$chatMessage = new ChatMessage(
+				$chunk,
+				$options,
+			);
 
-		$chatMessage->transport($this->name());
-		$this->chatter->send($chatMessage);
+			$chatMessage->transport($this->name());
+			$this->chatter->send($chatMessage);
+		}
 	}
 }

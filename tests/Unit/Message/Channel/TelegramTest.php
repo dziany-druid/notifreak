@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Message\Channel;
 
 use App\Message\Channel\Telegram;
-use App\Message\ContentInterface;
 use App\Message\Notification;
+use App\Parser\ContentInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Notifier\Bridge\Telegram\TelegramOptions;
@@ -32,9 +32,7 @@ class TelegramTest extends TestCase
 
 	public function testSendCreatesChatMessageAndSendsIt(): void
 	{
-		$contentMock = $this->createMock(ContentInterface::class);
-		$contentMock->method('markdown')->willReturn('Test message');
-		$notification = new Notification($contentMock, ['telegram']);
+		$notification = $this->createNotification('Test message');
 
 		$this->chatterMock
 			->expects($this->once())
@@ -58,19 +56,21 @@ class TelegramTest extends TestCase
 		$this->telegram->send($notification);
 	}
 
-	public function testSendTrimsLongMessageAndSendsIt(): void
+	public function testSendSplitsLongMessageAndSendsAllParts(): void
 	{
-		$contentMock = $this->createMock(ContentInterface::class);
-		$contentMock->method('markdown')->willReturn(str_repeat('A', 4100));
-		$notification = new Notification($contentMock, ['telegram']);
+		$longMessage = str_repeat('A', 4100);
+		$notification = $this->createNotification($longMessage);
+
+		/** @var array{0: string, 1: string} $sentMessages */
+		$sentMessages = [];
 
 		$this->chatterMock
-			->expects($this->once())
+			->expects($this->exactly(2))
 			->method('send')
 			->with(
 				$this->callback(
-					function (ChatMessage $chatMessage) {
-						$this->assertSame(str_repeat('A', 4096), $chatMessage->getSubject());
+					static function (ChatMessage $chatMessage) use (&$sentMessages) {
+						$sentMessages[] = $chatMessage->getSubject();
 
 						return true;
 					},
@@ -78,5 +78,28 @@ class TelegramTest extends TestCase
 			);
 
 		$this->telegram->send($notification);
+		$this->assertCount(2, $sentMessages);
+		$this->assertSame(str_repeat('A', 4096), $sentMessages[0]);
+		$this->assertSame(str_repeat('A', 4), $sentMessages[1]);
+	}
+
+	public function testSendDoesNotSendWhenContentIsEmpty(): void
+	{
+		$notification = $this->createNotification('');
+
+		$this->chatterMock
+			->expects($this->never())
+			->method('send');
+
+		$this->telegram->send($notification);
+	}
+
+	private function createNotification(string $message): Notification
+	{
+		$contentMock = $this->createMock(ContentInterface::class);
+		$contentMock->method('plain')->willReturn($message);
+		$contentMock->method('markdown')->willReturn($message);
+
+		return new Notification($contentMock, ['telegram']);
 	}
 }
