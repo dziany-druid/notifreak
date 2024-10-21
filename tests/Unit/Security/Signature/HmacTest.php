@@ -7,7 +7,7 @@ namespace App\Tests\Unit\Security\Signature;
 use App\Security\Signature\Hmac;
 use PHPUnit\Framework\TestCase;
 
-class HmacTest extends TestCase
+final class HmacTest extends TestCase
 {
 	private string $securityKey;
 

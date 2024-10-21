@@ -11,7 +11,7 @@ use App\Parser\ContentInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class HandlerTest extends TestCase
+final class HandlerTest extends TestCase
 {
 	private Handler $handler;
 

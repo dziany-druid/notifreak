@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class SignatureVerificationListenerTest extends TestCase
+final class SignatureVerificationListenerTest extends TestCase
 {
 	private MockObject&SignatureInterface $signatureMock;
 

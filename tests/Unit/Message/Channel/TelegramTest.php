@@ -13,7 +13,7 @@ use Symfony\Component\Notifier\Bridge\Telegram\TelegramOptions;
 use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Message\ChatMessage;
 
-class TelegramTest extends TestCase
+final class TelegramTest extends TestCase
 {
 	private MockObject&ChatterInterface $chatterMock;
 

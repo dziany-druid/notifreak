@@ -8,7 +8,7 @@ use App\Validator\Channel;
 use App\Validator\ChannelValidator;
 use PHPUnit\Framework\TestCase;
 
-class ChannelTest extends TestCase
+final class ChannelTest extends TestCase
 {
 	public function testMessageProperty(): void
 	{
