@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class SignatureVerificationListenerTest extends TestCase
 {
@@ -22,11 +23,14 @@ final class SignatureVerificationListenerTest extends TestCase
 
 	private MockObject&HttpKernelInterface $kernelMock;
 
+	private MockObject&TranslatorInterface $translatorMock;
+
 	protected function setUp(): void
 	{
 		$this->signatureMock = $this->createMock(SignatureInterface::class);
 		$this->kernelMock = $this->createMock(HttpKernelInterface::class);
-		$this->listener = new SignatureVerificationListener($this->signatureMock, false);
+		$this->translatorMock = $this->createMock(TranslatorInterface::class);
+		$this->listener = new SignatureVerificationListener($this->signatureMock, $this->translatorMock, false);
 	}
 
 	public function testOnKernelRequestWithInvalidRoute(): void
@@ -81,7 +85,7 @@ final class SignatureVerificationListenerTest extends TestCase
 
 	public function testOnKernelRequestWithUnsafeSignatureInDebugMode(): void
 	{
-		$listener = new SignatureVerificationListener($this->signatureMock, true);
+		$listener = new SignatureVerificationListener($this->signatureMock, $this->translatorMock, true);
 		$request = $this->createRequest('unsafe', 'parser_name');
 		$event = $this->createEvent($request);
 		$listener->onKernelRequest($event);

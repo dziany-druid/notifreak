@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="Iiw99gs" resname="Invalid signature.">
+        <source>Invalid signature.</source>
+        <target>Nieprawidłowa sygnatura.</target>
+      </trans-unit>
+      <trans-unit id="67Rb4h5" resname="New error from {project}">
+        <source>New error from {project}</source>
+        <target>Pojawił się nowy błąd w projekcie {project}</target>
+      </trans-unit>
+      <trans-unit id="qTzS7ex" resname="first occurrence time">
+        <source>first occurrence time</source>
+        <target>czas pierwszego wystąpienia</target>
+      </trans-unit>
+      <trans-unit id="1wIIzPI" resname="occurence time">
+        <source>occurence time</source>
+        <target>czas wystąpienia</target>
+      </trans-unit>
+      <trans-unit id="Angyk_c" resname="show error details">
+        <source>show error details</source>
+        <target>pokaż szczegóły błędu</target>
+      </trans-unit>
+      <trans-unit id="gwX48fo" resname="error details">
+        <source>error details</source>
+        <target>szczegóły błędu</target>
+      </trans-unit>
+      <trans-unit id="1d5s79w">
+        <source>Channel "{{ channelName }}" is not supported, supported channels: {{ supportedChannelNames }}.</source>
+        <target>Kanał "{{ channelName }}" nie jest obsługiwany, obsługiwane kanały: {{ supportedChannelNames }}.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -9,6 +9,7 @@ use App\Validator\Channel;
 use App\Validator\ChannelValidator;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @extends ConstraintValidatorTestCase<ChannelValidator>
@@ -45,6 +46,8 @@ final class ChannelValidatorTest extends ConstraintValidatorTestCase
 
 	protected function createValidator(): ConstraintValidatorInterface
 	{
+		$translatorMock = $this->createMock(TranslatorInterface::class);
+		$translatorMock->method('trans')->willReturn('Channel "{{ channelName }}" is not supported, supported channels: {{ supportedChannelNames }}.');
 		$channelOneMock = $this->createMock(ChannelInterface::class);
 		$channelOneMock->method('name')->willReturn('one');
 		$channelTwoMock = $this->createMock(ChannelInterface::class);
@@ -55,6 +58,6 @@ final class ChannelValidatorTest extends ConstraintValidatorTestCase
 			$channelTwoMock,
 		];
 
-		return new ChannelValidator($channels);
+		return new ChannelValidator($translatorMock, $channels);
 	}
 }

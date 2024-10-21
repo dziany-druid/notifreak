@@ -10,6 +10,7 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsEventListener(
 	event: 'kernel.request',
@@ -19,6 +20,7 @@ final class SignatureVerificationListener
 {
 	public function __construct(
 		private readonly SignatureInterface $signature,
+		private readonly TranslatorInterface $translator,
 
 		#[Autowire(param: 'kernel.debug')]
 		private readonly bool $debugModeEnabled,
@@ -58,7 +60,7 @@ final class SignatureVerificationListener
 		$event->setResponse(
 			new JsonResponse(
 				[
-					'message' => 'Invalid signature.',
+					'message' => $this->translator->trans('Invalid signature.'),
 				],
 
 				Response::HTTP_FORBIDDEN,
