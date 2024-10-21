@@ -10,3 +10,10 @@ insert_final_newline = true
 [*.{yaml,yml,json,lock,neon}]
 indent_style = space
 indent_size = 4
+
+[*.xlf]
+indent_style = space
+indent_size = 2
+
+[*.twig]
+insert_final_newline = false

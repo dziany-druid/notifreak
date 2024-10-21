@@ -3,6 +3,5 @@ parameters:
 
     paths:
         - 'bin/'
-        - 'config/'
         - 'public/'
         - 'src/'

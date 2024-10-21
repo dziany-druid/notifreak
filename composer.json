@@ -15,9 +15,12 @@
         "symfony/notifier": "~7.1.0",
         "symfony/runtime": "~7.1.0",
         "symfony/telegram-notifier": "~7.1.0",
+        "symfony/translation": "~7.1.0",
         "symfony/twig-bundle": "~7.1.0",
         "symfony/validator": "~7.1.0",
-        "symfony/yaml": "~7.1.0"
+        "symfony/yaml": "~7.1.0",
+        "twig/extra-bundle": "^3.13",
+        "twig/intl-extra": "^3.13"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.44",

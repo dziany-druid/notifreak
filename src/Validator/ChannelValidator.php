@@ -8,6 +8,7 @@ use App\Message\Channel\ChannelInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChannelValidator extends ConstraintValidator
 {
@@ -15,6 +16,8 @@ class ChannelValidator extends ConstraintValidator
 	 * @param iterable<ChannelInterface> $channels
 	 */
 	public function __construct(
+		private readonly TranslatorInterface $translator,
+
 		#[AutowireIterator('app.message.channel')]
 		private readonly iterable $channels,
 	) {
@@ -29,7 +32,7 @@ class ChannelValidator extends ConstraintValidator
 
 		if (!\in_array($value, $supportedChannelNames, true)) {
 			$this->context
-				->buildViolation($constraint->message)
+				->buildViolation($this->translator->trans($constraint->message))
 				->setParameter('{{ channelName }}', \is_string($value) ? $value : serialize($value))
 				->setParameter('{{ supportedChannelNames }}', '"'.implode('", "', $supportedChannelNames).'"')
 				->addViolation();

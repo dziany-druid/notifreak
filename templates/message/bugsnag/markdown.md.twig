@@ -1,13 +1,13 @@
 🐞*Bugsnag*
 
-New error from *{{ error.project }}*:
+{{ 'New error from {project}'|trans({'{project}': "*#{error.project}*"}) }}:
 
 ```
 {{ error.exceptionClass }}
 	{{ error.message }}
 ```
 
-*First occurrence time:* {{ error.firstReceived|date('Y-m-d H:i e') }}
-*Occurrence time:* {{ error.receivedAt|date('Y-m-d H:i e') }}
+*{{ 'first occurrence time'|trans|capitalize }}:* {{ error.firstReceived|format_datetime('short', 'long') }}
+*{{ 'occurence time'|trans|capitalize }}:* {{ error.receivedAt|format_datetime('short', 'long') }}
 
-[Show error details]({{ error.url }})
+[{{ 'show error details'|trans|capitalize }}]({{ error.url }})

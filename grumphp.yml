@@ -35,6 +35,9 @@ grumphp:
             memory_limit: '256M'
             use_grumphp_paths: true
 
+            ignore_patterns:
+                - '/^config\/(.*)$/'
+
             metadata:
                 priority: 1
 
