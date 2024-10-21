@@ -45,7 +45,7 @@ final class TelegramTest extends TestCase
 							->disableWebPagePreview(true);
 
 						$this->assertEquals($options, $chatMessage->getOptions());
-						$this->assertSame($notification->content->markdown(), $chatMessage->getSubject());
+						$this->assertSame($notification->markdownContent, $chatMessage->getSubject());
 						$this->assertSame('telegram', $chatMessage->getTransport());
 
 						return true;
