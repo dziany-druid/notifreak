@@ -18,7 +18,6 @@
         "symfony/translation": "~7.1.0",
         "symfony/twig-bundle": "~7.1.0",
         "symfony/validator": "~7.1.0",
-        "symfony/yaml": "~7.1.0",
         "twig/extra-bundle": "^3.13",
         "twig/intl-extra": "^3.13"
     },
@@ -29,7 +28,8 @@
         "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^11.4",
         "symfony/stopwatch": "~7.1.0",
-        "symfony/web-profiler-bundle": "~7.1.0"
+        "symfony/web-profiler-bundle": "~7.1.0",
+        "symfony/yaml": "~7.1.0"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",

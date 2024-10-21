@@ -7,9 +7,9 @@ use Symfony\Config\FrameworkConfig;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 return static function (FrameworkConfig $frameworkConfig): void {
-	$frameworkConfig->defaultLocale(env('APP_LOCALE'));
+	$frameworkConfig->secret(env('APP_SECRET'));
 
 	$frameworkConfig
-		->translator()
-		->defaultPath('%kernel.project_dir%/translations');
+		->session()
+		->enabled(false);
 };
