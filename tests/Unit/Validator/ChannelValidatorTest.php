@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<ChannelValidator>
  */
-class ChannelValidatorTest extends ConstraintValidatorTestCase
+final class ChannelValidatorTest extends ConstraintValidatorTestCase
 {
 	public function testValidChannel(): void
 	{

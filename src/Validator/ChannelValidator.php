@@ -15,7 +15,7 @@ class ChannelValidator extends ConstraintValidator
 	 * @param iterable<ChannelInterface> $channels
 	 */
 	public function __construct(
-		#[AutowireIterator('app.notification_channel')]
+		#[AutowireIterator('app.message.channel')]
 		private readonly iterable $channels,
 	) {
 	}

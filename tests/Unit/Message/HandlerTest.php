@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Message;
 
 use App\Message\Channel\ChannelInterface;
-use App\Message\ContentInterface;
 use App\Message\Handler;
 use App\Message\Notification;
+use App\Parser\ContentInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class HandlerTest extends TestCase
+final class HandlerTest extends TestCase
 {
 	private Handler $handler;
 

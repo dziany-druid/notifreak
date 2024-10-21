@@ -1,0 +1,11 @@
+Bugsnag
+
+New error from {{ error.project }}:
+
+{{ error.exceptionClass }}
+	{{ error.message }}
+
+First occurrence time: {{ error.firstReceived|date('Y-m-d H:i e') }}
+Occurrence time: {{ error.receivedAt|date('Y-m-d H:i e') }}
+
+Error details: {{ error.url }}

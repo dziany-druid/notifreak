@@ -4,74 +4,53 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Message\ContentInterface;
 use App\Message\Notification;
+use App\Parser\ParserInterface;
+use App\Parser\Request\ParsedRequest;
+use App\Parser\Request\ParsedRequestBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class NotificationController extends AbstractController
 {
+	/**
+	 * @param ParserInterface[] $parsers
+	 */
 	public function __construct(
-		private readonly ValidatorInterface $validator,
 		private readonly MessageBusInterface $messageBus,
+
+		#[AutowireIterator('app.request.parser')]
+		private readonly iterable $parsers,
 	) {
 	}
 
 	#[Route(
-		path: '/notification/{signature}/{service}',
+		path: '/notification/{signature}/{parserName}',
 		name: 'queue_notification',
-		requirements: ['signature' => '[a-z0-9]+', 'service' => '[a-z]+'],
+		requirements: ['signature' => '[a-z0-9]+', 'parserName' => '[a-z]+'],
 		methods: [Request::METHOD_POST],
 		stateless: true,
 	)]
-	public function queue(string $service, Request $request): Response
+	public function queue(Request $request): Response
 	{
-		$content = new class implements ContentInterface {
-			public function plain(): string
-			{
-				return 'plain';
-			}
+		$parsedRequest = $this->parseRequest($request);
 
-			public function html(): string
-			{
-				return '<b>html</b>';
-			}
-
-			public function markdown(): string
-			{
-				return '*markdown*';
-			}
-		};
-
-		$notification = new Notification(
-			$content,
-			$request->query->all('channels'),
-		);
-
-		$violations = $this->validator->validate($notification);
-
-		if (\count($violations) > 0) {
-			$violationMessages = [];
-
-			foreach ($violations as $violation) {
-				$violationMessages[] = [
-					'propertyPath' => $violation->getPropertyPath(),
-					'message' => $violation->getMessage(),
-				];
-			}
-
+		if (\count($parsedRequest->violations) > 0) {
 			return $this->json(
 				[
-					'violations' => $violationMessages,
+					'violations' => $this->getViolationMessages($parsedRequest->violations),
 				],
 
 				Response::HTTP_BAD_REQUEST,
 			);
 		}
+
+		$notification = new Notification($parsedRequest->content, $parsedRequest->queryParams->channels);
 
 		/** @var Notification $sentMessage */
 		$sentMessage = $this->messageBus->dispatch($notification)->getMessage();
@@ -84,5 +63,38 @@ class NotificationController extends AbstractController
 
 			Response::HTTP_ACCEPTED,
 		);
+	}
+
+	private function parseRequest(Request $request): ParsedRequest
+	{
+		$parsedRequestBuilder = new ParsedRequestBuilder($request);
+
+		foreach ($this->parsers as $parser) {
+			if ($parser->supports($request)) {
+				$parser->parse($request, $parsedRequestBuilder);
+			}
+		}
+
+		return $parsedRequestBuilder->build();
+	}
+
+	/**
+	 * @return array<int, array{
+	 *     propertyPath: string,
+	 *     message: string|\Stringable
+	 * }>
+	 */
+	private function getViolationMessages(ConstraintViolationListInterface $violations): array
+	{
+		$violationMessages = [];
+
+		foreach ($violations as $violation) {
+			$violationMessages[] = [
+				'propertyPath' => $violation->getPropertyPath(),
+				'message' => $violation->getMessage(),
+			];
+		}
+
+		return $violationMessages;
 	}
 }
