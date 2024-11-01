@@ -13,6 +13,7 @@
         "symfony/framework-bundle": "~7.1.0",
         "symfony/messenger": "~7.1.0",
         "symfony/notifier": "~7.1.0",
+        "symfony/redis-messenger": "~7.1.0",
         "symfony/runtime": "~7.1.0",
         "symfony/telegram-notifier": "~7.1.0",
         "symfony/translation": "~7.1.0",
