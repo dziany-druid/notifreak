@@ -8,12 +8,21 @@ use App\Parser\ContentInterface;
 
 readonly class Notification
 {
+	public string $plainContent;
+
+	public string $markdownContent;
+
+	public string $htmlContent;
+
 	/**
 	 * @param string[] $channels
 	 */
 	public function __construct(
-		public ContentInterface $content,
+		ContentInterface $content,
 		public array $channels,
 	) {
+		$this->plainContent = $content->plain();
+		$this->markdownContent = $content->markdown();
+		$this->htmlContent = $content->html();
 	}
 }

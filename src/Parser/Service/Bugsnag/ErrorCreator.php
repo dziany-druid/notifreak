@@ -45,7 +45,7 @@ final class ErrorCreator
 
 		#[Assert\NotBlank]
 		#[Assert\Type('string')]
-		#[Assert\Url]
+		#[Assert\Url(requireTld: true)]
 		private readonly mixed $url,
 
 		ValidatorInterface $validator,

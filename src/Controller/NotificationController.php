@@ -57,7 +57,7 @@ class NotificationController extends AbstractController
 
 		return $this->json(
 			[
-				'content' => $sentMessage->content->plain(),
+				'content' => $sentMessage->plainContent,
 				'channels' => $sentMessage->channels,
 			],
 

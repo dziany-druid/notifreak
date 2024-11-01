@@ -1,10 +1,10 @@
 🐞*Bugsnag*
 
-{{ 'New error from {project}'|trans({'{project}': "*#{error.project}*"}) }}:
+{{ 'New error from {project}'|trans({'{project}': "*#{error.project}*"})|raw }}:
 
 ```
-{{ error.exceptionClass }}
-	{{ error.message }}
+{{ error.exceptionClass|raw }}
+	{{ error.message|raw }}
 ```
 
 *{{ 'first occurrence time'|trans|capitalize }}:* {{ error.firstReceived|format_datetime('short', 'long') }}
