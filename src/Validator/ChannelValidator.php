@@ -42,7 +42,7 @@ class ChannelValidator extends ConstraintValidator
 	/**
 	 * @return string[]
 	 */
-	private function supportedChannelNames(): array
+	public function supportedChannelNames(): array
 	{
 		$supportedChannelNames = [];
 
