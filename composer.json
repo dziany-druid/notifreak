@@ -7,6 +7,7 @@
         "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/console": "~7.1.0",
         "symfony/dotenv": "~7.1.0",
         "symfony/flex": "^2",
@@ -73,6 +74,7 @@
         },
         "symfony": {
             "allow-contrib": false,
+            "docker": true,
             "require": "7.1.*"
         }
     },

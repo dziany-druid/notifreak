@@ -1,0 +1,33 @@
+x-common-php-config: &common-php-config
+  build:
+    context: '.'
+    dockerfile: '.docker/Dockerfile'
+    target: 'frankenphp_dev'
+
+  volumes:
+    - './:/app'
+    - './.docker/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro'
+    - './.docker/frankenphp/conf.d/20-app.dev.ini:/usr/local/etc/php/app.conf.d/20-app.dev.ini:ro'
+
+  environment:
+    XDEBUG_MODE: "${XDEBUG_MODE:-off}" # See https://xdebug.org/docs/all_settings#mode
+    MESSENGER_TRANSPORT_DSN: 'redis://redis:6379/messages'
+
+  extra_hosts:
+    # Ensure that host.docker.internal is correctly defined on Linux
+    - 'host.docker.internal:host-gateway'
+
+services:
+  redis:
+    image: 'redis:7.4.1'
+    container_name: 'redis'
+
+    ports:
+      - '6379:6379'
+
+  worker-messenger:
+    <<: *common-php-config
+
+  php:
+    tty: true
+    <<: *common-php-config

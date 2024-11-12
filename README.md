@@ -16,14 +16,18 @@ Notifreak is an open-source application designed for aggregating notifications f
 ## Prerequisites
 - PHP 8.3 or higher
 - [Composer](https://getcomposer.org)
-- [PhpRedis](https://github.com/phpredis/phpredis)
-- [Redis](https://redis.io)
+- [PhpRedis](https://github.com/phpredis/phpredis) (optional)
+- [Redis](https://redis.io) (optional)
 
 ## Installation
+### Manual
 1. Download the latest stable version of the application.
 2. Install dependencies with the command `composer install --no-dev --optimize-autoloader --classmap-authoritative`.
 3. Set environment variables. See [Configuration](#configuration).
 4. Run `php bin/console messenger:consume` to start the worker that processes messages.
+
+### Docker
+Notifreak uses [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker). To run Notifreak in Docker, set the environment variables and then execute the command `docker compose -f compose.yaml -f compose.prod.yaml up -d --build` as described [here](https://github.com/dunglas/symfony-docker/blob/main/docs/production.md).
 
 ## Configuration
 Configuration can be done via environment variables. You can use system environment variables or the `.env` file as described [here](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production).

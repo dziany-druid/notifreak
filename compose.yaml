@@ -1,0 +1,42 @@
+x-common-php-config: &common-php-config
+  image: 'notifreak-php'
+  restart: 'unless-stopped'
+
+  environment:
+    SERVER_NAME: '${SERVER_NAME:-localhost}, php:80'
+    APP_TIMEZONE: '${APP_TIMEZONE}'
+    APP_LOCALE: '${APP_LOCALE}'
+    APP_URI: '${APP_URI}'
+    SECURITY_KEY: '${SECURITY_KEY}'
+    APP_SECRET: '${APP_SECRET}'
+    MESSENGER_TRANSPORT_DSN: '${MESSENGER_TRANSPORT_DSN}'
+    TELEGRAM_DSN: '${TELEGRAM_DSN}'
+
+  volumes:
+    - 'caddy_data:/data'
+    - 'caddy_config:/config'
+
+services:
+  worker-messenger:
+    <<: *common-php-config
+    command: 'php ./bin/console messenger:consume -vv --limit=10 --memory-limit=128M --time-limit=3600'
+
+  php:
+    <<: *common-php-config
+
+    ports:
+      - target: 80
+        published: '${HTTP_PORT:-80}'
+        protocol: 'tcp'
+
+      - target: 443
+        published: '${HTTPS_PORT:-443}'
+        protocol: 'tcp'
+
+      - target: 443
+        published: '${HTTP3_PORT:-443}'
+        protocol: 'udp'
+
+volumes:
+  caddy_data:
+  caddy_config:

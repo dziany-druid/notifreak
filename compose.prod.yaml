@@ -1,0 +1,12 @@
+x-common-php-config: &common-php-config
+  build:
+    context: '.'
+    dockerfile: '.docker/Dockerfile'
+    target: 'frankenphp_prod'
+
+services:
+  worker-messenger:
+    <<: *common-php-config
+
+  php:
+    <<: *common-php-config

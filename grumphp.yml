@@ -2,6 +2,9 @@ grumphp:
     ascii: null
     stop_on_failure: true
 
+    git_hook_variables:
+        EXEC_GRUMPHP_COMMAND: 'docker compose exec -T php'
+
     fixer:
         enabled: false
 
