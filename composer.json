@@ -27,7 +27,7 @@
         "ergebnis/composer-normalize": "^2.44",
         "friendsofphp/php-cs-fixer": "^3.64",
         "phpro/grumphp-shim": "^2.8",
-        "phpstan/phpstan": "^1.12",
+        "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^11.4",
         "symfony/stopwatch": "~7.1.0",
         "symfony/web-profiler-bundle": "~7.1.0",

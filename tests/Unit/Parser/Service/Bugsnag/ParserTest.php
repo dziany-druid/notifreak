@@ -47,7 +47,6 @@ final class ParserTest extends TestCase
 
 	public function testParseWithoutValidationErrors(): void
 	{
-		/** @var string $body */
 		$body = json_encode([
 			'project' => ['
 				name' => 'SampleProject',
@@ -61,6 +60,8 @@ final class ParserTest extends TestCase
 				'url' => 'http://example.com',
 			],
 		]);
+
+		\assert(\is_string($body));
 
 		$request = new Request(
 			content: $body,
@@ -77,7 +78,6 @@ final class ParserTest extends TestCase
 
 	public function testParseWithValidationErrors(): void
 	{
-		/** @var string $body */
 		$body = json_encode([
 			'project' => [
 				'name' => '',
@@ -88,6 +88,8 @@ final class ParserTest extends TestCase
 				'message' => 'An error occurred',
 			],
 		]);
+
+		\assert(\is_string($body));
 
 		$request = new Request(
 			content: $body,
