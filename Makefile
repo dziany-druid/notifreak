@@ -1,17 +1,11 @@
-# Executables (local)
 DOCKER_COMP = docker compose
-
-# Docker containers
 PHP_CONT = $(DOCKER_COMP) exec php
-
-# Executables
-PHP      = $(PHP_CONT) php
+PHP = $(PHP_CONT) php
 COMPOSER = $(PHP_CONT) composer
-SYMFONY  = $(PHP) bin/console
+SYMFONY = $(PHP) bin/console
 
-# Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build up start down logs sh composer vendor sf cc test
+.PHONY: help build up start down logs sh composer vendor sf cc test
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -44,13 +38,13 @@ cc: sf
 
 ## —— Tools 🛠 ———————————————————————————————————————————————————————————————
 grumphp: ## Run GrumPHP
-	@$(COMPOSER) grumphp
+	@$(DOCKER_COMP) run --rm --no-deps php composer grumphp
 
 php-cs-fixer: ## Fix code formatting with PHP Coding Standards Fixer
-	@$(COMPOSER) php-cs-fixer
+	@$(DOCKER_COMP) run --rm --no-deps php composer php-cs-fixer
 
 phpstan: ## Analyse code with PHPStan
-	@$(COMPOSER) phpstan
+	@$(DOCKER_COMP) run --rm --no-deps php composer phpstan
 
 phpunit: ## Start tests with PHPUnit
-	@$(COMPOSER) phpunit
+	@$(DOCKER_COMP) run --rm --no-deps php composer phpunit
