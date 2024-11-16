@@ -1,22 +1,11 @@
 #syntax=docker/dockerfile:1
 
-# Versions
-FROM dunglas/frankenphp:1-php8.3 AS frankenphp_upstream
+FROM dunglas/frankenphp:1-php8.3 AS frankenphp-upstream
 
-# The different stages of this Dockerfile are meant to be built into separate images
-# https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
-# https://docs.docker.com/compose/compose-file/#target
-
-
-# Base FrankenPHP image
-FROM frankenphp_upstream AS frankenphp_base
+FROM frankenphp-upstream AS notifreak-base
 
 WORKDIR /app
 
-VOLUME /app/var/
-
-# persistent / runtime deps
-# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	file \
 	gettext \
@@ -50,8 +39,7 @@ ENTRYPOINT ["docker-entrypoint"]
 HEALTHCHECK --start-period=60s CMD curl -f http://localhost:2019/metrics || exit 1
 CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile" ]
 
-# Dev FrankenPHP image
-FROM frankenphp_base AS frankenphp_dev
+FROM notifreak-base AS notifreak-dev
 
 ENV APP_ENV=dev XDEBUG_MODE=off
 
@@ -66,8 +54,7 @@ COPY --link .docker/frankenphp/conf.d/20-app.dev.ini $PHP_INI_DIR/app.conf.d/
 
 CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
 
-# Prod FrankenPHP image
-FROM frankenphp_base AS frankenphp_prod
+FROM notifreak-base AS notifreak-prod
 
 ENV APP_ENV=prod
 ENV FRANKENPHP_CONFIG="import worker.Caddyfile"
@@ -77,18 +64,18 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY --link .docker/frankenphp/conf.d/20-app.prod.ini $PHP_INI_DIR/app.conf.d/
 COPY --link .docker/frankenphp/worker.Caddyfile /etc/caddy/worker.Caddyfile
 
-# prevent the reinstallation of vendors at every changes in the source code
+# Prevent the reinstallation of vendors at every changes in the source code.
 COPY --link composer.* symfony.* ./
+
 RUN set -eux; \
 	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
 
-# copy sources
 COPY --link . ./
 RUN rm -Rf .docker/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
+	composer dump-autoload --optimize --classmap-authoritative --no-dev; \
 	composer dump-env prod; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync;

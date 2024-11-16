@@ -1,5 +1,5 @@
-x-common-php-config: &common-php-config
-  image: 'notifreak-php'
+x-common-app-config: &common-app-config
+  image: 'notifreak'
   restart: 'unless-stopped'
 
   volumes:
@@ -7,8 +7,9 @@ x-common-php-config: &common-php-config
     - 'caddy_config:/config'
 
 services:
-  php:
-    <<: *common-php-config
+  app:
+    <<: *common-app-config
+    container_name: 'app'
 
     ports:
       - target: 80
@@ -23,13 +24,14 @@ services:
         published: '${HTTP3_PORT:-443}'
         protocol: 'udp'
 
-  worker-messenger:
-    <<: *common-php-config
+  app-messenger-worker:
+    <<: *common-app-config
+    container_name: 'app-messenger-worker'
     command: 'php ./bin/console messenger:consume -vv --limit=10 --memory-limit=128M --time-limit=3600'
 
     depends_on:
-      php:
-        condition: service_healthy
+      app:
+        condition: 'service_healthy'
         restart: true
 
 volumes:

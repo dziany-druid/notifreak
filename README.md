@@ -27,7 +27,7 @@ Notifreak is an open-source application designed for aggregating notifications f
 4. Run `php bin/console messenger:consume` to start the worker that processes messages.
 
 ### Docker
-Notifreak uses [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker). To run Notifreak in Docker, set the environment variables and then execute the command `docker compose -f compose.yaml -f compose.prod.yaml up -d --build` as described [here](https://github.com/dunglas/symfony-docker/blob/main/docs/production.md).
+Notifreak uses [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker). To run Notifreak in Docker, set the environment variables and then execute the command `docker compose -f compose.yaml -f compose.prod.yaml up -d` as described [here](https://github.com/dunglas/symfony-docker/blob/main/docs/production.md).
 
 ## Configuration
 Configuration can be done via environment variables. You can use system environment variables or the `.env.local` file as described [here](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production).

@@ -1,12 +1,13 @@
-x-common-php-config: &common-php-config
+x-common-app-config: &common-app-config
+  image: 'notifreak:dev'
+
   build:
     context: '.'
     dockerfile: '.docker/Dockerfile'
-    target: 'frankenphp_dev'
+    target: 'notifreak-dev'
 
   volumes:
     - './:/app'
-    - './var:/app/var'
     - './.docker/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro'
     - './.docker/frankenphp/conf.d/20-app.dev.ini:/usr/local/etc/php/app.conf.d/20-app.dev.ini:ro'
 
@@ -25,9 +26,9 @@ services:
     ports:
       - '6379:6379'
 
-  worker-messenger:
-    <<: *common-php-config
-
-  php:
+  app:
     tty: true
-    <<: *common-php-config
+    <<: *common-app-config
+
+  app-messenger-worker:
+    <<: *common-app-config

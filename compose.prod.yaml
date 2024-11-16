@@ -1,8 +1,11 @@
-x-common-php-config: &common-php-config
+x-common-app-config: &common-app-config
   build:
     context: '.'
     dockerfile: '.docker/Dockerfile'
-    target: 'frankenphp_prod'
+    target: 'notifreak-prod'
+
+  volumes:
+    - 'app_var:/app/var'
 
   environment:
     SERVER_NAME: '${SERVER_NAME:-localhost}, php:80'
@@ -15,8 +18,11 @@ x-common-php-config: &common-php-config
     TELEGRAM_DSN: '${TELEGRAM_DSN}'
 
 services:
-  worker-messenger:
-    <<: *common-php-config
+  app:
+    <<: *common-app-config
 
-  php:
-    <<: *common-php-config
+  app-messenger-worker:
+    <<: *common-app-config
+
+volumes:
+  app_var:

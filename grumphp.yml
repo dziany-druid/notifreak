@@ -3,7 +3,7 @@ grumphp:
     stop_on_failure: true
 
     git_hook_variables:
-        EXEC_GRUMPHP_COMMAND: ['docker', 'compose', 'run', '-T', '--rm', '--no-deps', 'php']
+        EXEC_GRUMPHP_COMMAND: ['docker', 'compose', 'run', '-T', '--rm', '--no-deps', '-e', 'XDEBUG_MODE=coverage', 'app']
 
     fixer:
         enabled: false
