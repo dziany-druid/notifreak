@@ -1,0 +1,28 @@
+x-common-app-config: &common-app-config
+  build:
+    context: '.'
+    dockerfile: '.docker/Dockerfile'
+    target: 'notifreak-prod'
+
+  volumes:
+    - 'app_var:/app/var'
+
+  environment:
+    SERVER_NAME: '${SERVER_NAME:-localhost}, php:80'
+    APP_SECRET: '${APP_SECRET}'
+    APP_TIMEZONE: '${APP_TIMEZONE}'
+    APP_LOCALE: '${APP_LOCALE}'
+    APP_URI: '${APP_URI}'
+    SECURITY_KEY: '${SECURITY_KEY}'
+    MESSENGER_TRANSPORT_DSN: '${MESSENGER_TRANSPORT_DSN}'
+    TELEGRAM_DSN: '${TELEGRAM_DSN}'
+
+services:
+  app:
+    <<: *common-app-config
+
+  app-messenger-worker:
+    <<: *common-app-config
+
+volumes:
+  app_var:

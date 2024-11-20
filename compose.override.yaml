@@ -1,0 +1,34 @@
+x-common-app-config: &common-app-config
+  image: 'notifreak:dev'
+
+  build:
+    context: '.'
+    dockerfile: '.docker/Dockerfile'
+    target: 'notifreak-dev'
+
+  volumes:
+    - './:/app'
+    - './.docker/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro'
+    - './.docker/frankenphp/conf.d/20-app.dev.ini:/usr/local/etc/php/app.conf.d/20-app.dev.ini:ro'
+
+  environment:
+    XDEBUG_MODE: "${XDEBUG_MODE:-off}" # See https://xdebug.org/docs/all_settings#mode
+
+  extra_hosts:
+    # Ensure that host.docker.internal is correctly defined on Linux
+    - 'host.docker.internal:host-gateway'
+
+services:
+  redis:
+    image: 'redis:7.4.1'
+    container_name: 'redis'
+
+    ports:
+      - '6379:6379'
+
+  app:
+    tty: true
+    <<: *common-app-config
+
+  app-messenger-worker:
+    <<: *common-app-config

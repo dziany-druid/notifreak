@@ -17,3 +17,7 @@ indent_size = 2
 
 [*.twig]
 insert_final_newline = false
+
+[{,docker-}compose{,.*}.{yaml,yml}]
+indent_style = space
+indent_size = 2

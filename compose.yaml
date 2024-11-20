@@ -1,0 +1,39 @@
+x-common-app-config: &common-app-config
+  image: 'notifreak'
+  restart: 'unless-stopped'
+
+  volumes:
+    - 'caddy_data:/data'
+    - 'caddy_config:/config'
+
+services:
+  app:
+    <<: *common-app-config
+    container_name: 'app'
+
+    ports:
+      - target: 80
+        published: '${HTTP_PORT:-80}'
+        protocol: 'tcp'
+
+      - target: 443
+        published: '${HTTPS_PORT:-443}'
+        protocol: 'tcp'
+
+      - target: 443
+        published: '${HTTP3_PORT:-443}'
+        protocol: 'udp'
+
+  app-messenger-worker:
+    <<: *common-app-config
+    container_name: 'app-messenger-worker'
+    command: 'php ./bin/console messenger:consume -vv --limit=10 --memory-limit=128M --time-limit=3600'
+
+    depends_on:
+      app:
+        condition: 'service_healthy'
+        restart: true
+
+volumes:
+  caddy_data:
+  caddy_config:

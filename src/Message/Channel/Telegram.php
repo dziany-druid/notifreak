@@ -11,9 +11,9 @@ use Symfony\Component\Notifier\Message\ChatMessage;
 
 final class Telegram implements ChannelInterface
 {
-	private const MAX_MESSAGE_SIZE = 4096;
+	private const int MAX_MESSAGE_SIZE = 4096;
 
-	private const ENCODING = 'UTF-8';
+	private const string ENCODING = 'UTF-8';
 
 	public function __construct(
 		private readonly ChatterInterface $chatter,

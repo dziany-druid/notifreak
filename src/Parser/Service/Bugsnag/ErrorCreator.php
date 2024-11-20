@@ -12,7 +12,7 @@ final class ErrorCreator
 {
 	public readonly ConstraintViolationListInterface $violations;
 
-	private const VALID_DATE_FORMAT = 'Y-m-d\TH:i:s.u\Z';
+	private const string VALID_DATE_FORMAT = 'Y-m-d\TH:i:s.u\Z';
 
 	/**
 	 * @param string $project

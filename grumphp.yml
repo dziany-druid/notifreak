@@ -2,6 +2,9 @@ grumphp:
     ascii: null
     stop_on_failure: true
 
+    git_hook_variables:
+        EXEC_GRUMPHP_COMMAND: ['docker', 'compose', 'run', '-T', '--rm', '--no-deps', '-e', 'XDEBUG_MODE=coverage', 'app']
+
     fixer:
         enabled: false
 
@@ -43,6 +46,7 @@ grumphp:
 
         phpunit:
             config_file: './phpunit.xml.dist'
+            always_execute: true
             testsuite: 'unit'
 
             metadata:

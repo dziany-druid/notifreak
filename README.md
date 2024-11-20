@@ -16,17 +16,23 @@ Notifreak is an open-source application designed for aggregating notifications f
 ## Prerequisites
 - PHP 8.3 or higher
 - [Composer](https://getcomposer.org)
-- [PhpRedis](https://github.com/phpredis/phpredis)
-- [Redis](https://redis.io)
+- [PhpRedis](https://github.com/phpredis/phpredis) (optional)
+- [Redis](https://redis.io) (optional)
 
 ## Installation
+### Manual
 1. Download the latest stable version of the application.
 2. Install dependencies with the command `composer install --no-dev --optimize-autoloader --classmap-authoritative`.
 3. Set environment variables. See [Configuration](#configuration).
 4. Run `php bin/console messenger:consume` to start the worker that processes messages.
 
+### Docker
+Notifreak uses [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker). To run Notifreak in Docker, set the environment variables and then execute the command `docker compose -f compose.yaml -f compose.prod.yaml up -d` as described [here](https://github.com/dunglas/symfony-docker/blob/main/docs/production.md).
+
 ## Configuration
-Configuration can be done via environment variables. You can use system environment variables or the `.env` file as described [here](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production).
+Configuration can be done via environment variables. You can use system environment variables or the `.env.local` file as described [here](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production).
+
+With reference to [https://github.com/dunglas/symfony-docker/blob/main/docs/production.md](https://github.com/dunglas/symfony-docker/blob/main/docs/production.md#passing-local-environment-variables-to-containers), if you are using Docker in production environment, variables from `.env.local` and `.env.*.local` files are ignored, so you need to use system environment variables.
 
 ### APP_ENV
 **type:** `string` **default:** `'dev'` **possible values:** `'dev'`, `'test'`, or `'prod'`
@@ -64,7 +70,7 @@ The URL where the application is hosted.
 Specifies the security key Notifreak uses to [sign secure URLs](#security). You should set this to a unique, random string. It's crucial to keep this secret safe and not expose it publicly.
 
 ### MESSENGER_TRANSPORT_DSN
-**type:** `string` **default:** `'redis://localhost:6379/messages'`
+**type:** `string` **default:** `'redis://redis:6379/messages'`
 
 Notifreak sends notifications using the [Symfony Messenger](https://symfony.com/doc/current/messenger.html) component. Notifications are queued in Redis by default and processed asynchronously. If you'd prefer for the notifications to be processed synchronously, set this value to `'sync://'`.
 
