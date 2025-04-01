@@ -1,0 +1,245 @@
+kind: 'pipeline'
+type: 'docker'
+name: 'build'
+
+steps:
+    - name: hello-world
+      image: 'alpine:latest'
+      commands:
+          - 'echo "Helloh, World"'
+
+    - name: build-image
+      image: plugins/docker
+
+      when:
+          changeset:
+              includes: ['.docker/**/*']
+
+      environment:
+          DOCKER_BUILDKIT: 1
+
+      settings:
+          registry: docker-registry:5000
+          repo: docker-registry:5000/notifreak
+          dockerfile: .docker/Dockerfile
+          target: notifreak-dev
+          tags: ['zmiany']
+          insecure: true
+          dry_run: true
+          cache_from: docker-registry:5000/notifreak:dev
+
+#---
+#kind: 'pipeline'
+#type: 'docker'
+#name: 'build & check'
+#
+#trigger:
+#    event:
+#        - push
+#    changes:
+#        include:
+#            - .docker/**
+#
+#steps:
+#    - name: 'build'
+#      image: 'plugins/kaniko'
+#
+#      settings:
+#          registry: '127.0.0.1:5000'
+#          repo: 'notifreak'
+#          username: ''
+#          password: ''
+#          tags: ['zmiany']
+#          dockerfile: '.docker/Dockerfile'
+#          target: 'notifreak-dev'
+#
+#    - name: 'install dependencies'
+#      image: '127.0.0.1:5000/notifreak:zmiany'
+#
+#      commands:
+#          - 'composer install --no-progress --prefer-dist'
+#
+#    - name: 'analyze'
+#      image: '127.0.0.1:5000/notifreak:zmiany'
+#
+#      environment:
+#          XDEBUG_MODE: 'coverage'
+#
+#      commands:
+#          - 'composer grumphp'
+#
+#---
+#kind: 'pipeline'
+#type: 'docker'
+#name: 'check'
+#
+#trigger:
+#    event:
+#        - push
+#    changes:
+#        exclude:
+#            - .docker/**
+#
+#when:
+#    changes:
+#        exclude:
+#            - '.docker/**'
+#
+#steps:
+#    - name: 'install dependencies'
+#      image: '127.0.0.1:5000/notifreak:dev'
+#
+#      commands:
+#          - 'composer install --no-progress --prefer-dist'
+#
+#    - name: 'analyze'
+#      image: '127.0.0.1:5000/notifreak:dev'
+#
+#      environment:
+#          XDEBUG_MODE: 'coverage'
+#
+#      commands:
+#          - 'composer grumphp'
+
+
+
+
+
+
+
+
+
+
+#    - name: composer-install
+#      image: 127.0.0.1:5000/notifreak:dev
+#      commands:
+#          - composer install --prefer-dist --no-progress
+#
+#    - name: run-grumphp
+#      image: 127.0.0.1:5000/notifreak:dev
+#      environment:
+#          XDEBUG_MODE: coverage
+#      commands:
+#          - ./vendor/bin/grumphp run
+
+
+
+
+#kind: pipeline
+#type: docker
+#name: build-notifreak-dev
+#
+#steps:
+#    - name: build-image
+#      image: plugins/docker
+#      privileged: true
+#      volumes:
+#          - name: docker
+#            path: /var/run/docker.sock
+#      settings:
+#          registry: 127.0.0.1:5000
+#          repo: 127.0.0.1:5000/notifreak
+#          tags:
+#              - dev
+#          dockerfile: .docker/Dockerfile
+#          target: notifreak-dev
+#          insecure: true
+#          dry_run: true
+#
+#    - name: composer-install
+#      image: 127.0.0.1:5000/notifreak:dev
+#      commands:
+#          - composer install --prefer-dist --no-progress
+#
+#    - name: run-grumphp
+#      image: 127.0.0.1:5000/notifreak:dev
+#      environment:
+#          XDEBUG_MODE: coverage
+#      commands:
+#          - ./vendor/bin/grumphp run
+#
+#    - name: push-image
+#      image: plugins/docker
+#      privileged: true
+#      volumes:
+#          - name: docker
+#            path: /var/run/docker.sock
+##      when:
+##          event:
+##              - tag
+#      settings:
+#          registry: 127.0.0.1:5000
+#          repo: 127.0.0.1:5000/notifreak
+#          tags:
+#              - dev
+#          dockerfile: .docker/Dockerfile
+#          target: notifreak-dev
+#          insecure: true
+#
+#    - name: environment-variables
+#      image: 127.0.0.1:5000/notifreak:dev
+#      environment:
+#          APP_ENV: 'prod'
+#          APP_DEBUG: false
+#          APP_SECRET: 'ChangeMe'
+#          APP_TIMEZONE: 'Europe/Warsaw'
+#          APP_LOCALE: 'pl-PL'
+#          APP_URI: 'https://notifreak.jakimiak.net'
+#          SECURITY_KEY: 'ChangeMe'
+#          MESSENGER_TRANSPORT_DSN: 'sync://'
+#          TELEGRAM_DSN: 'null://null'
+#      commands:
+#          - echo "APP_ENV='$APP_ENV'" > .env.local
+#          - echo "APP_DEBUG=$APP_DEBUG" >> .env.local
+#          - echo "APP_SECRET='$APP_SECRET'" >> .env.local
+#          - echo "APP_TIMEZONE='$APP_TIMEZONE'" >> .env.local
+#          - echo "APP_LOCALE='$APP_LOCALE'" >> .env.local
+#          - echo "APP_URI='$APP_URI'" >> .env.local
+#          - echo "SECURITY_KEY='$SECURITY_KEY'" >> .env.local
+#          - echo "MESSENGER_TRANSPORT_DSN='$MESSENGER_TRANSPORT_DSN'" >> .env.local
+#          - echo "TELEGRAM_DSN='$TELEGRAM_DSN'" >> .env.local
+#          - composer dump-env prod
+#
+#    - name: composer-prod
+#      image: 127.0.0.1:5000/notifreak:dev
+#      commands:
+#          - composer install --prefer-dist --no-dev --no-progress --optimize-autoloader --classmap-authoritative
+#
+#    - name: deploy
+#      image: drillster/drone-rsync
+#      settings:
+#          hosts: s31.mydevil.net
+#          port: 22
+#          user: "PJ"
+#          key:
+#              from_secret: ORG_MYDEVIL_SSH_KEY
+#          target: "/home/PJ/domains/notifreak.jakimiak.net"
+#          recursive: true
+#          script:
+#              - php83 /home/PJ/domains/notifreak.jakimiak.net/bin/console cache:clear
+#          include:
+#              - "bin/"
+#              - "bin/**"
+#              - "config/"
+#              - "config/**"
+#              - "public/"
+#              - "public/**"
+#              - "src/"
+#              - "src/**"
+#              - "templates/"
+#              - "templates/**"
+#              - "translations/"
+#              - "translations/**"
+#              - "vendor/"
+#              - "vendor/**"
+#              - ".env.local.php"
+#              - "composer.json"
+#              - "composer.lock"
+#              - "symfony.lock"
+#          exclude:
+#              - "*"
+#
+#volumes:
+#    - name: docker
+#      host:
+#          path: /var/run/docker.sock
